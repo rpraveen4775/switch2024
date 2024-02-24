@@ -1,0 +1,19 @@
+//How do you find all pairs of an integer array whose sum is equal to a given number? 
+import java.util.HashMap;
+
+class FindPairsEqualToSum {
+
+    public static void main(String arg[]){
+        int expectedSum = 20;
+        int[] inputArray = new int[]{2,3,56,75,2,13,5,5,3,7, 23, -3};
+        HashMap<Integer, Integer> pairMap = new HashMap<>();
+        for(int element: inputArray){
+            if(pairMap.containsKey(expectedSum-element)) {
+                System.out.println("Pair "+element+" "+(expectedSum-element)+" Forms Sum of "+expectedSum);
+            } else {
+                pairMap.put(element, expectedSum-element);
+            }
+        }
+        
+    }
+}
