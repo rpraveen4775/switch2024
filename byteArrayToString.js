@@ -1,14 +1,10 @@
-// Creating new byte array using
-// Uint8Array instance
-let byteArray = new Uint8Array([
+// Creating new input array buffer
+let byteArray = Buffer.from([
 	74, 97, 118, 97, 83, 99, 114, 105, 112, 116,
 ]);
 
-// Creating textDecoder instance
-let decoder = new TextDecoder("utf-8");
+// Converting buffer to string
+let str = byteArray.toString();
 
-// Using decode method to get string output
-let str = decoder.decode(byteArray);
-
-// Display the output
+// Display output
 console.log(str);
