@@ -5,10 +5,6 @@
 let a = [ 1, 2, 3, 4, 5,6,7,8,9,10];
 
 function rotateArray(arr,k){
-
-     if(arr.length == 1 || k == 0 ) {
-            return;
-    }
     let len = arr.length -1 ;
     for(let rotate=0; rotate<k; rotate++){
         let lastElement = arr[len];
@@ -28,14 +24,16 @@ console.log(a);
 // Correct Solve 
 
 
-let arr = [1,2,3,4]
+let arr = [1,2,3,4,5]
+ 
 function rotateArray(arr,k){
-    let lastIndex = arr.length - 1 ; 
-    for(let i=0,j=lastIndex; i<k, j>lastIndex-k; i++,j--){
-        [arr[i], arr[j]] = [arr[j],arr[i]]
-        console.log(arr);
+
+    if(arr.length == 1 || k == 0 || k == arr.length ) {
+        return;
     }
-    console.log("--")
+    k = k % arr.length;
+    let lastIndex = arr.length - 1 ; 
+    reverseArray(arr,0,lastIndex)
     reverseArray(arr,0,k-1)
     reverseArray(arr,k,lastIndex);
 
@@ -52,5 +50,5 @@ function reverseArray(a,start,end){
     }
 }
 
-rotateArray(arr,2)
+rotateArray(arr,4)
 console.log(arr)
