@@ -5,6 +5,10 @@
 let a = [ 1, 2, 3, 4, 5,6,7,8,9,10];
 
 function rotateArray(arr,k){
+
+     if(arr.length == 1 || k == 0 ) {
+            return;
+    }
     let len = arr.length -1 ;
     for(let rotate=0; rotate<k; rotate++){
         let lastElement = arr[len];
