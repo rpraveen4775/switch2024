@@ -11,63 +11,38 @@ class BinaryTree {
         this.count=0;
         this.startNode=null;
     }
-    add(data){
-        this.count++;
-        let node = new Node(data);
-        if(this.startNode==null){
-            this.startNode = node;
-            return;
-        } else {
-            this.insert(node);
-        }
-    }
+    // Method to remove given node from binary tree
     remove(){
         this.count--;
+        // Incomplete
     }
+    // Level Order Traversal Iterative Version
     levelOrderTraversal(){
-        let stack = [];
-        let pointerNode = this.startNode;
-        stack.push(pointerNode);
-        while(stack.length){
-            let node = stack.shift();
+       if(this.startNode==null){
+        console.log("No Start Node Found ");
+        return;
+       }
+       let array = [];
+       array.push(this.startNode);
+        while(array.length){
+            let node = array.shift();
             console.log(node.data);
-            let leftNode = node.left;
-            let rightNode = node.right;
-
-            if(leftNode !=null ){
-                stack.push(leftNode);
-            }
-            
-            if(rightNode !=null ) {
-                stack.push(rightNode);
-            }
-
+            if (node.left) array.push(node.left);
+            if (node.right) array.push(node.right);
         }
-       
+
     }
+    // InOrder Traversal Iterative Version
     inOrderTraversal(){
-        let stack = [];
-        let pointerNode = this.startNode;
 
-        stack.push(pointerNode);
-        while(stack.length){
-            let root = stack.pop();
-            if(root.right){
-                stack.push(root.right)
-            }
-            stack.push(root);
-            if(root.left){
-                stack.push(root)
-            }
-        }
-        while(stack.length){
-            let root = stack.pop();
-            console.log(root.data);
-        }
     }
+    // PreOrderTraversal Iterative Version
     preOrderTraversal(){
+    }
+    postOrderTraversal(){
 
     }
+    // Recursive Inorder : Complete
     inOrderTraversalRecursion(node){  
         if(node==null){
             return;
@@ -77,6 +52,7 @@ class BinaryTree {
             this.inOrderTraversalRecursion(node.right);
         }
     }
+    // Recursive PreOrder : Complete
     preOrderTraversalRecursion(node){
         if(node==null){
             return;
@@ -86,6 +62,7 @@ class BinaryTree {
             this.preOrderTraversal(node.right);
         }
     }
+    // Recursive Post Order Traversal : Complete
     postOrderTraversalRecursion(){
         if(node==null){
             return;
@@ -95,13 +72,16 @@ class BinaryTree {
             console.log(node.data);
         }
     }
+    // Method to search whether given node exist or not. 
     search(){
 
     }
+    // Method to find Lowest Common Ancestor for two Roots
     findLCA(node1, node2){
 
     }
-    insert(node){
+    add(data){
+        let node = new Node(data);
         if (this.startNode == null){
             this.startNode = node;
             return;
@@ -134,16 +114,17 @@ class BinaryTree {
 }
 
 let binaryTree = new BinaryTree();
-binaryTree.add(1);
+ binaryTree.add(1);
  binaryTree.add(2);
  binaryTree.add(3);
  binaryTree.add(4);
  binaryTree.add(5);
  binaryTree.add(6);
+ binaryTree.add(7);
 
 
-// binaryTree.levelOrderTraversal();
-//binaryTree.preOrderTraversal(binaryTree.startNode);
-// binaryTree.inOrderTraversalRecursion(binaryTree.startNode);
+//binaryTree.levelOrderTraversal();
+// binaryTree.preOrderTraversalRecursion(binaryTree.startNode);
+binaryTree.inOrderTraversalRecursion(binaryTree.startNode);
 // binaryTree.postOrderTraversal(binaryTree.startNode);
-binaryTree.inOrderTraversal();
+// binaryTree.inOrderTraversal();
