@@ -11,38 +11,46 @@ class BinaryTree {
         this.count=0;
         this.startNode=null;
     }
-    // Method to remove given node from binary tree
+    add(data){
+        this.count++;
+        let node = new Node(data);
+        if(this.startNode==null){
+            this.startNode = node;
+            return;
+        } else {
+            this.insert(node);
+        }
+    }
     remove(){
         this.count--;
-        // Incomplete
     }
-    // Level Order Traversal Iterative Version
     levelOrderTraversal(){
-       if(this.startNode==null){
-        console.log("No Start Node Found ");
-        return;
-       }
-       let array = [];
-       array.push(this.startNode);
-        while(array.length){
-            let node = array.shift();
+        let stack = [];
+        let pointerNode = this.startNode;
+        stack.push(pointerNode);
+        while(stack.length){
+            let node = stack.shift();
             console.log(node.data);
-            if (node.left) array.push(node.left);
-            if (node.right) array.push(node.right);
-        }
+            let leftNode = node.left;
+            let rightNode = node.right;
 
+            if(leftNode !=null ){
+                stack.push(leftNode);
+            }
+            
+            if(rightNode !=null ) {
+                stack.push(rightNode);
+            }
+
+        }
+       
     }
-    // InOrder Traversal Iterative Version
     inOrderTraversal(){
 
     }
-    // PreOrderTraversal Iterative Version
     preOrderTraversal(){
-    }
-    postOrderTraversal(){
 
     }
-    // Recursive Inorder : Complete
     inOrderTraversalRecursion(node){  
         if(node==null){
             return;
@@ -52,7 +60,6 @@ class BinaryTree {
             this.inOrderTraversalRecursion(node.right);
         }
     }
-    // Recursive PreOrder : Complete
     preOrderTraversalRecursion(node){
         if(node==null){
             return;
@@ -62,7 +69,6 @@ class BinaryTree {
             this.preOrderTraversal(node.right);
         }
     }
-    // Recursive Post Order Traversal : Complete
     postOrderTraversalRecursion(){
         if(node==null){
             return;
@@ -72,16 +78,20 @@ class BinaryTree {
             console.log(node.data);
         }
     }
-    // Method to search whether given node exist or not. 
     search(){
 
     }
-    // Method to find Lowest Common Ancestor for two Roots
     findLCA(node1, node2){
 
     }
-    add(data){
-        let node = new Node(data);
+    findInOrderPredecessor(){
+
+    }
+
+    findInOrderSucessor(){
+
+    }
+    insert(node){
         if (this.startNode == null){
             this.startNode = node;
             return;
@@ -114,17 +124,78 @@ class BinaryTree {
 }
 
 let binaryTree = new BinaryTree();
- binaryTree.add(1);
+binaryTree.add(1);
  binaryTree.add(2);
  binaryTree.add(3);
  binaryTree.add(4);
  binaryTree.add(5);
  binaryTree.add(6);
- binaryTree.add(7);
 
 
-//binaryTree.levelOrderTraversal();
-// binaryTree.preOrderTraversalRecursion(binaryTree.startNode);
-binaryTree.inOrderTraversalRecursion(binaryTree.startNode);
+// binaryTree.levelOrderTraversal();
+// binaryTree.preOrderTraversal(binaryTree.startNode);
+// binaryTree.inOrderTraversalRecursion(binaryTree.startNode);
 // binaryTree.postOrderTraversal(binaryTree.startNode);
-// binaryTree.inOrderTraversal();
+binaryTree.inOrderTraversal();
+
+
+
+/*                                                  1
+                                              /          \
+                                         2                    3
+                                    4       5           6         7
+                                 8    9  10    11   12    13   14     15     
+
+*/ 
+
+
+/*  IN binary tree 
+    to Search : BFS/ DFS
+    to Delete : replace node to be deleted with left most child of that node 
+*/
+
+
+
+/*              
+                                            20  
+                                    8                45
+                                3      18        32      52
+                            1     4  15   19  21   40  48   60
+*/
+
+
+1 3 4 8 15 18 19 20 21 32 40 42 45 52 60 
+
+/*  IN BST
+    to Search : BFS/DFS
+    to delete : 
+            -- leaf node : Directly delete
+            -- node with one child : 
+                -- if one child node is left node: 
+                        -- delete and replce with left child
+                -- if one child node is right node:
+                        -- delete and replace with right child
+            -- node with two child : 
+                    -- either replace it with inordersuccessor
+                    -- or replace it     with inorderpredecessor 
+*/
+
+
+/*              
+                                            20  
+                                    8                45
+                                3      18        32      52
+                            1     4  15   19  21   40  48   60
+*/
+
+
+    1, 15
+/* 
+
+ DFS :for 1   
+
+    nodes :    20(v1) 8(v1) 3(v1) 1(v1) 
+    
+DFS for node 15: 
+    nodes :    
+        20(v2) 8(v2) 18(v1) 15(v1) 
