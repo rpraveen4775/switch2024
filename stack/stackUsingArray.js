@@ -1,20 +1,24 @@
 class Stack {
     constructor(size){
         this.size = size;
-        this.array = [];
+        this.array = new Array(size);
+        this.lastUsedIndex = -1;
     }
 
     push(data){
-        if(this.array.length < this.size ){
-            this.array.push(data);
+        if(this.lastUsedIndex != this.size-1){
+            this.array[this.lastUsedIndex+1] = data;
+            this.lastUsedIndex ++ ;
         } else {
             console.log("Stack Overflow: cant insert data "+data );
         }
     }
 
     pop(){
-        if(this.array.length){
-            return this.array.pop();
+        if(this.lastUsedIndex != -1){
+            let data = this.array[this.lastUsedIndex];
+            this.lastUsedIndex --;
+            return data;
         } else {
             console.log("Stack is Empty");
         }
