@@ -45,31 +45,66 @@ class BinaryTree {
         }
        
     }
-    inOrderTraversal(){
 
-    }
-    preOrderTraversal(){
+    // Process till left most element
+    // Pop element and process right, if no right, Then Process it.
+    // Stack.pop()
+    /*                                              1
+                                              /          \
+                                         2                    3
+                                    4       5           6         7 
+                                 8    9  10    11   12    13   14     15     
 
-    }
-    inOrderTraversalRecursion(node){  
-        if(node==null){
-            return;
-        } else {
-            this.inOrderTraversalRecursion(node.left);
+    */ 
+
+    inOrderTraversalIterative(currentNode){
+        let stack = [];
+        stack.push(currentNode);
+        while(currentNode !=null || stack.length){
+            while(currentNode && currentNode.left){
+                stack.push(currentNode.left);
+                currentNode = currentNode.left;
+            }
+            let node = stack.pop();
             console.log(node.data);
-            this.inOrderTraversalRecursion(node.right);
+            if(node.right){
+                currentNode = node.right;
+            }
         }
+    }
+    preOrderTraversalIterative(node){
+        let stack = [];
+        let currentNode = node;
+        while(currentNode != null || stack.length){
+            while(currentNode!=null){
+                console.log(currentNode.data);
+                if(currentNode.left){
+                    stack.push(currentNode);
+                    currentNode = currentNode.left;
+                }
+            }
+           currentNode = stack.pop();
+           currentNode = currentNode.right;
+        }
+    }
+    inOrderTraversalRecursion(node){
+        if(node == null){
+            return;
+        }
+        this.inOrderTraversalRecursion(node.left)
+        console.log(node.data);
+        this.inOrderTraversalRecursion(node.right)
     }
     preOrderTraversalRecursion(node){
         if(node==null){
             return;
         } else {
             console.log(node.data);
-            this.preOrderTraversal(node.left);
-            this.preOrderTraversal(node.right);
+            this.preOrderTraversalRecursion(node.left);
+            this.preOrderTraversalRecursion(node.right);
         }
     }
-    postOrderTraversalRecursion(){
+    postOrderTraversalRecursion(node){
         if(node==null){
             return;
         } else {
@@ -124,30 +159,31 @@ class BinaryTree {
 }
 
 let binaryTree = new BinaryTree();
-binaryTree.add(1);
- binaryTree.add(2);
- binaryTree.add(3);
- binaryTree.add(4);
- binaryTree.add(5);
- binaryTree.add(6);
+let inputArray = [1, 2, 3, 14, 5, 6, 7,8,9,16,11,15,11];
 
+inputArray.forEach(key => binaryTree.add(key));
 
 // binaryTree.levelOrderTraversal();
-// binaryTree.preOrderTraversal(binaryTree.startNode);
-// binaryTree.inOrderTraversalRecursion(binaryTree.startNode);
-// binaryTree.postOrderTraversal(binaryTree.startNode);
-binaryTree.inOrderTraversal();
+// binaryTree.preOrderTraversalIterative(binaryTree.startNode);
+binaryTree.inOrderTraversalIterative(binaryTree.startNode);
+// binaryTree.preOrderTraversalRecursion(binaryTree.startNode);
+binaryTree.inOrderTraversalRecursion();
 
 
 
 /*                                                  1
                                               /          \
                                          2                    3
-                                    4       5           6         7
+                                    4       5           6         7 
                                  8    9  10    11   12    13   14     15     
 
 */ 
 
+
+//  1, 3, 2, 5 , 4 
+
+// Pre Order : root left right 
+// post order : left right root 
 
 /*  IN binary tree 
     to Search : BFS/ DFS
@@ -164,7 +200,6 @@ binaryTree.inOrderTraversal();
 */
 
 
-1 3 4 8 15 18 19 20 21 32 40 42 45 52 60 
 
 /*  IN BST
     to Search : BFS/DFS
@@ -189,7 +224,6 @@ binaryTree.inOrderTraversal();
 */
 
 
-    1, 15
 /* 
 
  DFS :for 1   
@@ -199,3 +233,5 @@ binaryTree.inOrderTraversal();
 DFS for node 15: 
     nodes :    
         20(v2) 8(v2) 18(v1) 15(v1) 
+
+*/
