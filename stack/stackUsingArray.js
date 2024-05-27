@@ -15,6 +15,8 @@ class Stack {
     pop(){
         if(this.array.length){
             return this.array.pop();
+        } else {
+            console.log("Stack is Empty");
         }
     }
 }
@@ -27,3 +29,23 @@ stack.push(2);
 stack.push(2);
 stack.push(2);
 stack.push(2);stack.push(2);stack.push(2);stack.push(2);stack.push(2);stack.push(2);stack.push(2);stack.push(2);
+
+
+console.log(stack.pop());
+console.log(stack.pop());console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
+console.log(stack.pop());
