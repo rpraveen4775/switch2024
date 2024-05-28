@@ -33,7 +33,11 @@ class Stack {
         }
     }
     peek(){
-        return this.lastElement;
+        if(this.queue1.length == 0 && this.queue2.length == 0 ){
+            return "Stack is Empty"
+        } else {
+            return this.lastElement;
+        }
     }
     isEmpty(){
         return (this.queue1.length == 0 && this.queue2.length == 0);
@@ -48,28 +52,13 @@ stack.push(4)
 stack.push(5)
 stack.push(6)
 
-console.log(stack.peek());
 
-console.log(stack.pop());
-
-
-console.log(stack.isEmpty());
-console.log(stack.pop());
-console.log(stack.pop());
-console.log(stack.peek());
-
-console.log(stack.pop());
-console.log(stack.isEmpty());
-console.log(stack.pop());
-console.log(stack.pop());
-console.log(stack.peek());
-
-console.log(stack.pop());
-
-console.log(stack.isEmpty());
-console.log(stack.isEmpty());
-console.log(stack.pop());
-console.log(stack.pop());
-console.log(stack.pop());
-
-
+console.log(stack.pop()); // 6
+console.log(stack.isEmpty()); //false 
+console.log(stack.pop()); //5
+console.log(stack.pop()); // 4
+console.log(stack.pop()); // 3 
+console.log(stack.isEmpty()); // false
+console.log(stack.pop()); // 2 
+console.log(stack.pop()); // 1 
+console.log(stack.peek()); // 1 
