@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .chat-box {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 10px;
+            height: 300px;
+            width: 100%;
+            max-width: 600px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .message.from-me {
+            text-align: right;
+        }
+        .input-group {
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            font-size: 1em;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .input-group button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+        #status {
+            margin-bottom: 10px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket P2P Chat</h1>
+    <div class="input-group">
+        <input id="peerId" type="text" placeholder="Enter your ID" />
+        <button onclick="register()">Register</button>
+    </div>
+    <div id="status"></div>
+    <div class="input-group">
+        <input id="recipientId" type="text" placeholder="Enter recipient ID" />
+        <input id="message" type="text" placeholder="Type your message here..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="chat"></div>
+
+    <script>
+        let socket;
+        let myId;
+        let chatBoxes = {};
+
+        function register() {
+            myId = document.getElementById('peerId').value.trim();
+            if (myId === '') {
+                alert('Please enter your ID.');
+                return;
+            }
+            socket = new WebSocket('ws://localhost:8080');
+
+            socket.onopen = () => {
+                document.getElementById('status').textContent = 'Connected to the server';
+                socket.send(JSON.stringify({ type: 'register', id: myId }));
+            };
+
+            socket.onmessage = (event) => {
+                const messageData = JSON.parse(event.data);
+                displayMessage(messageData.from, messageData.message);
+            };
+
+            socket.onclose = () => {
+                document.getElementById('status').textContent = 'Disconnected from the server';
+            };
+        }
+
+        function sendMessage() {
+            const recipientId = document.getElementById('recipientId').value.trim();
+            const message = document.getElementById('message').value.trim();
+            if (recipientId === '' || message === '') {
+                alert('Please enter both recipient ID and message.');
+                return;
+            }
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'message',
+                    from: myId,
+                    to: recipientId,
+                    message: message
+                }));
+                displayMessage(recipientId, message, true);
+                document.getElementById('message').value = '';
+            } else {
+                console.log('WebSocket is not open. Cannot send message.');
+            }
+        }
+
+        function displayMessage(from, message, fromMe = false) {
+            const chat = document.getElementById('chat');
+            let chatBox = chatBoxes[from];
+            if (!chatBox) {
+                chatBox = document.createElement('div');
+                chatBox.id = `chat-${from}`;
+                chatBox.className = 'chat-box';
+                chatBoxes[from] = chatBox;
+                chat.appendChild(chatBox);
+            }
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            if (fromMe) {
+                messageElement.classList.add('from-me');
+                messageElement.textContent = `Me: ${message}`;
+            } else {
+                messageElement.textContent = `${from}: ${message}`;
+            }
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
