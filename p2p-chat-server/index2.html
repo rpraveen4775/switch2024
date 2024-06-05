@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat Client</title>
+    <style>
+        #chat {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .message.from-me {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket P2P Chat</h1>
+    <input id="peerId" type="text" placeholder="Enter your ID" />
+    <button onclick="register()">Register</button>
+    <br/><br/>
+    <input id="recipientId" type="text" placeholder="Enter recipient ID" />
+    <input id="message" type="text" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
+    <div id="chat"></div>
+
+    <script>
+        let socket;
+        let myId;
+
+        function register() {
+            myId = document.getElementById('peerId').value;
+            socket = new WebSocket('ws://localhost:8080');
+
+            socket.onopen = () => {
+                console.log('Connected to the server');
+                socket.send(JSON.stringify({ type: 'register', id: myId }));
+            };
+
+            socket.onmessage = (event) => {
+                const chat = document.getElementById('chat');
+                const messageData = JSON.parse(event.data);
+                const message = document.createElement('div');
+                message.className = 'message';
+                if (messageData.from === myId) {
+                    message.classList.add('from-me');
+                }
+                message.textContent = `${messageData.from}: ${messageData.message}`;
+                chat.appendChild(message);
+                chat.scrollTop = chat.scrollHeight;  // Auto-scroll to the latest message
+            };
+
+            socket.onclose = () => {
+                console.log('Disconnected from the server');
+            };
+        }
+
+        function sendMessage() {
+            const recipientId = document.getElementById('recipientId').value;
+            const message = document.getElementById('message').value;
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'message',
+                    from: myId,
+                    to: recipientId,
+                    message: message
+                }));
+                const chat = document.getElementById('chat');
+                const sentMessage = document.createElement('div');
+                sentMessage.className = 'message from-me';
+                sentMessage.textContent = `Me: ${message}`;
+                chat.appendChild(sentMessage);
+                chat.scrollTop = chat.scrollHeight;  // Auto-scroll to the latest message
+                document.getElementById('message').value = '';
+            } else {
+                console.log('WebSocket is not open. Cannot send message.');
+            }
+        }
+    </script>
+</body>
+</html>
+

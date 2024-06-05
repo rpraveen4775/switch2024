@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat Client</title>
+</head>
+<body>
+    <h1>WebSocket P2P Chat</h1>
+    <input id="peerId" type="text" placeholder="Enter your ID" />
+    <button onclick="register()">Register</button>
+    <br/><br/>
+    <input id="recipientId" type="text" placeholder="Enter recipient ID" />
+    <input id="message" type="text" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
+    <div id="chat"></div>
+
+    <script>
+        let socket;
+        let myId;
+
+        function register() {
+            myId = document.getElementById('peerId').value;
+            socket = new WebSocket('ws://localhost:8080');
+
+            socket.onopen = () => {
+                console.log('Connected to the server');
+                socket.send(JSON.stringify({ type: 'register', id: myId }));
+            };
+
+            socket.onmessage = (event) => {
+                const chat = document.getElementById('chat');
+                const messageData = JSON.parse(event.data);
+                const message = document.createElement('div');
+                message.textContent = `${messageData.from}: ${messageData.message}`;
+                chat.appendChild(message);
+            };
+
+            socket.onclose = () => {
+                console.log('Disconnected from the server');
+            };
+        }
+
+        function sendMessage() {
+            const recipientId = document.getElementById('recipientId').value;
+            const message = document.getElementById('message').value;
+            socket.send(JSON.stringify({
+                type: 'message',
+                from: myId,
+                to: recipientId,
+                message: message
+            }));
+            document.getElementById('message').value = '';
+        }
+    </script>
+</body>
+</html>
+

@@ -35,4 +35,3 @@ let nextGreaterElement = function (input){
 
 
 nextGreaterElement(input);
-
